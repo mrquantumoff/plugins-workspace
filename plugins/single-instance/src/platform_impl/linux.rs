@@ -39,7 +39,7 @@ fn dbus_id(config: &Config, version: semver::Version) -> String {
 
 #[cfg(not(feature = "semver"))]
 fn dbus_id(config: &Config) -> String {
-    config.identifier.replace(['.', '-'], "_")
+    config.identifier
 }
 
 pub fn init<R: Runtime>(f: Box<SingleInstanceCallback<R>>) -> TauriPlugin<R> {
@@ -54,8 +54,8 @@ pub fn init<R: Runtime>(f: Box<SingleInstanceCallback<R>>) -> TauriPlugin<R> {
                 callback: f,
                 app_handle: app.clone(),
             };
-            let dbus_name = format!("org.{id}.SingleInstance");
-            let dbus_path = format!("/org/{id}/SingleInstance");
+            let dbus_name = format!("{id}.SingleInstance");
+            let dbus_path = format!("/{id}/SingleInstance");
 
             match Builder::session()
                 .unwrap()
@@ -112,7 +112,7 @@ pub fn destroy<R: Runtime, M: Manager<R>>(manager: &M) {
         #[cfg(not(feature = "semver"))]
         let id = dbus_id(manager.config());
 
-        let dbus_name = format!("org.{id}.SingleInstance",);
+        let dbus_name = format!("{id}.SingleInstance",);
         let _ = connection.0.release_name(dbus_name);
     }
 }
