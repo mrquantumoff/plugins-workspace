@@ -39,7 +39,7 @@ fn dbus_id(config: &Config, version: semver::Version) -> String {
 
 #[cfg(not(feature = "semver"))]
 fn dbus_id(config: &Config) -> String {
-    config.identifier
+    config.identifier.clone()
 }
 
 pub fn init<R: Runtime>(f: Box<SingleInstanceCallback<R>>) -> TauriPlugin<R> {
